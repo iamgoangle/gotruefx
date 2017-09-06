@@ -25,9 +25,9 @@ type Tick struct {
 }
 
 type Feed struct {
-	session  string
-	baseURI  string
-	uri 		 string
+	session string
+	baseURI string
+	uri     string
 }
 
 func (f *Feed) Get() []byte {
@@ -69,8 +69,8 @@ func (f *Feed) fetch(uri string) []byte {
 		t.Timestamp, _ = strconv.ParseInt(v[1], 10, 64)
 		t.Bid, _ = strconv.ParseFloat(v[2]+v[3], 64)
 		t.Offer, _ = strconv.ParseFloat(v[4]+v[5], 64)
-		t.High, _ = strconv.ParseFloat(v[6], 64)
-		t.Low, _ = strconv.ParseFloat(v[7], 64)
+		t.Low, _ = strconv.ParseFloat(v[6], 64)
+		t.High, _ = strconv.ParseFloat(v[7], 64)
 		t.Open, _ = strconv.ParseFloat(v[8], 64)
 		t.Spread = calcSpread(t)
 		ticks = append(ticks, t)
@@ -99,15 +99,13 @@ func round(num float64, precision uint) float64 {
 
 func NewFeed() *Feed {
 	var feed Feed
-	// They provide HTTPS on `*.truefx.com`, when use it, we will get this...
-	// error:14077410:SSL routines:SSL23_GET_SERVER_HELLO:sslv3 alert handshake failure
-	feed.baseURI = "http://webrates.truefx.com/rates/connect.html?f=csv"
+	feed.baseURI = "https://webrates.truefx.com/rates/connect.html?f=csv"
 	return &feed
 }
 
 func NewFeedAuthorize(username string, password string) (*Feed, error) {
 	feed := NewFeed()
-	feed.baseURI = "http://webrates.truefx.com/rates/connect.html?f=csv"
+	feed.baseURI = "https://webrates.truefx.com/rates/connect.html?f=csv"
 	uri := feed.baseURI + "&u=" + username + "&p=" + password + "&q=session"
 	resp, err := http.Get(uri)
 	if err != nil {
