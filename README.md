@@ -35,16 +35,18 @@ func main() {
   if err != nil {
       panic(err)
   }
-  tick := ticks[0]
-  fmt.Printf("%v\n", tick)
-  fmt.Printf("Symbol: %s\n", tick.Symbol)
-  fmt.Printf("Timestamp: %d\n", tick.Timestamp)
-  fmt.Printf("Bid: %.5f\n", tick.Bid)
-  fmt.Printf("Offer: %.5f\n", tick.Offer)
-  fmt.Printf("High: %.5f\n", tick.High)
-  fmt.Printf("Low: %.5f\n", tick.Low)
-  fmt.Printf("Open: %.5f\n", tick.Open)
-  fmt.Printf("Spread: %.1f", tick.Spread)
+  if (len(ticks) > 0) {
+    tick := ticks[0]
+    fmt.Printf("%v\n", tick)
+    fmt.Printf("Symbol: %s\n", tick.Symbol)
+    fmt.Printf("Timestamp: %d\n", tick.Timestamp)
+    fmt.Printf("Bid: %.5f\n", tick.Bid)
+    fmt.Printf("Offer: %.5f\n", tick.Offer)
+    fmt.Printf("High: %.5f\n", tick.High)
+    fmt.Printf("Low: %.5f\n", tick.Low)
+    fmt.Printf("Open: %.5f\n", tick.Open)
+    fmt.Printf("Spread: %.1f", tick.Spread)
+  }
 }
 ```
 
@@ -62,17 +64,18 @@ Open: 1.06816
 Spread: 0.8
 ```
 
-Authorized session can access to more minor pairs. [Register](https://www.truefx.com)
+Authorized session can access to more minor pairs. [Register](https://www.truefx.com).
 
 AUD/CAD, AUD/CHF, AUD/JPY, AUD/NZD, CAD/CHF, CAD/JPY, CHF/JPY, EUR/AUD, EUR/CAD,  
 EUR/NOK, EUR/NZD, GBP/CAD, GBP/CHF, NZD/JPY, NZD/USD, USD/NOK, USD/SEK
 
 ```go
-feed := truefx.NewFeedAuthorize("USERNAME", "PASSWORD")
+// feed := truefx.NewFeedAuthorize("USERNAME", "PASSWORD")
+feed := truefx.NewFeedBypass("USERNAME")
 feed.GetBySymbol("AUD/JPY")
 ```
 
-**Issue:** Getting a tick data by authorized session got an empty result `[]`; authorization was succeeded but something went wrong with the session. Even unauthorized session (request by fake id like ```&id=user:passwd:session:1```) can get a tick data of the above minor pairs, if you change the session_id everytime you request. Weird!!
+**Issue:** Getting a tick data by authorized session got an empty result `[]`; authorization was succeeded but something went wrong with the session. Even unauthorized session (request by fake id like ```&id=user:passwd:session:1```) can get a tick data of the above minor pairs, if you change the session_id everytime you request. So use .NewFeedBypass(username string) instead, but `username` must be a registered account.
 
 ## Contributing
 
