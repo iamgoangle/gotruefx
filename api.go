@@ -103,10 +103,10 @@ func NewFeed() *Feed {
 	return &feed
 }
 
-func NewFeedAuthorize(username string, password string) (*Feed, error) {
+func NewFeedAuthorized(username string, password string) (*Feed, error) {
 	feed := NewFeed()
 	feed.baseURI = "https://webrates.truefx.com/rates/connect.html?f=csv"
-	uri := feed.baseURI + "&u=" + username + "&p=" + password + "&q=session"
+	uri := feed.baseURI + "&u=" + username + "&p=" + password + "&q=fx"
 	resp, err := http.Get(uri)
 	if err != nil {
 		log.Fatal(err)
@@ -124,4 +124,10 @@ func NewFeedAuthorize(username string, password string) (*Feed, error) {
 		feed.session = string(bytes.TrimSpace(body))
 	}
 	return feed, err
+}
+
+func NewFeedBypass(username string) *Feed {
+	feed := NewFeed()
+	feed.session = username + ":p:q:0"
+	return feed
 }
