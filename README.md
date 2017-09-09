@@ -70,7 +70,7 @@ AUD/CAD, AUD/CHF, AUD/JPY, AUD/NZD, CAD/CHF, CAD/JPY, CHF/JPY, EUR/AUD, EUR/CAD,
 EUR/NOK, EUR/NZD, GBP/CAD, GBP/CHF, NZD/JPY, NZD/USD, USD/NOK, USD/SEK
 
 ```go
-// feed := truefx.NewFeedAuthorize("USERNAME", "PASSWORD")
+// feed := truefx.NewFeedAuthorized("USERNAME", "PASSWORD")
 feed := truefx.NewFeedBypass("USERNAME")
 feed.GetBySymbol("AUD/JPY")
 ```
