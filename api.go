@@ -3,7 +3,6 @@ package truefx
 import (
 	"bytes"
 	"encoding/csv"
-	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"log"
@@ -30,16 +29,31 @@ type Feed struct {
 	uri     string
 }
 
-func (f *Feed) Get() []byte {
+func (f *Feed) Get() []Tick {
 	return f.fetch(f.baseURI)
 }
 
-func (f *Feed) GetBySymbol(symbol string) []byte {
-	uri := f.baseURI + "&c=" + symbol
+func (f *Feed) GetBySymbol(s string) []Tick {
+	if len(s) < 6 {
+		return []Tick{}
+	}
+	var symbol string
+	var symbols string
+	for i, s := range strings.Split(s, ",") {
+		if !strings.Contains(s, "/") {
+			symbol = s[:3] + "/" + s[3:]
+			if i > 0 {
+				symbols += "," + symbol
+			} else {
+				symbols = symbol
+			}
+		}
+	}
+	uri := f.baseURI + "&c=" + strings.ToUpper(symbols)
 	return f.fetch(uri)
 }
 
-func (f *Feed) fetch(uri string) []byte {
+func (f *Feed) fetch(uri string) []Tick {
 	var ticks []Tick
 	var t Tick
 
@@ -75,12 +89,7 @@ func (f *Feed) fetch(uri string) []byte {
 		t.Spread = calcSpread(t)
 		ticks = append(ticks, t)
 	}
-
-	b, err := json.Marshal(ticks)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return b
+	return ticks
 }
 
 func calcSpread(t Tick) float64 {
