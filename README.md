@@ -5,7 +5,7 @@ The TrueFX API client for Go. Read [TrueFX](https://www.truefx.com/) for more in
 ## Installation
 
 ```go
-go get github.com/tonkla/gotruefx
+go get -u github.com/tonkla/gotruefx
 ```
 
 ## Usage
@@ -13,9 +13,9 @@ go get github.com/tonkla/gotruefx
 TrueFX provides a price feed of these ten pairs by default,  
 EUR/USD, USD/JPY, GBP/USD, EUR/GBP, USD/CHF, EUR/JPY, EUR/CHF, USD/CAD, AUD/USD, GBP/JPY
 
-* get all: ```feed.Get()```
-* get by the specific symbol: ```feed.GetBySymbol("EUR/USD")```
-* get more, separated by comma: ```feed.GetBySymbol("EUR/USD,USD/JPY")```
+* get all: `feed.Get()`
+* get by the specific symbol: `feed.GetBySymbol("EUR/USD")` or `feed.GetBySymbol("eurusd")`
+* get more, separated by comma: `feed.GetBySymbol("EUR/USD,USD/JPY")` or `feed.GetBySymbol("eurusd,usdjpy")`
 
 ```go
 package main
@@ -30,7 +30,7 @@ func main() {
   var ticks []truefx.Tick
   feed := truefx.NewFeed()
   ticks = feed.GetBySymbol("EUR/USD")
-  if (len(ticks) > 0) {
+  if len(ticks) > 0 {
     tick := ticks[0]
     fmt.Printf("%v\n", tick)
     fmt.Printf("Symbol: %s\n", tick.Symbol)
