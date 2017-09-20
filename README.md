@@ -22,7 +22,6 @@ package main
 
 import (
   "fmt"
-  "encoding/json"
 
   "github.com/tonkla/gotruefx"
 )
@@ -30,11 +29,7 @@ import (
 func main() {
   var ticks []truefx.Tick
   feed := truefx.NewFeed()
-  result := feed.GetBySymbol("EUR/USD")
-  err := json.Unmarshal(result, &ticks)
-  if err != nil {
-      panic(err)
-  }
+  ticks = feed.GetBySymbol("EUR/USD")
   if (len(ticks) > 0) {
     tick := ticks[0]
     fmt.Printf("%v\n", tick)
@@ -53,15 +48,15 @@ func main() {
 Results
 
 ```
-{EUR/USD 1485553500705 1.0697 1.06978 1.07253 1.0658 1.06816 0.8}
+{EUR/USD 1505927503092 1.19999 1.20004 1.20224 1.19838 1.19942 0.5}
 Symbol: EUR/USD
-Timestamp: 1485553500705
-Bid: 1.06970
-Offer: 1.06978
-High: 1.07253
-Low: 1.06580
-Open: 1.06816
-Spread: 0.8
+Timestamp: 1505927503092
+Bid: 1.19999
+Offer: 1.20004
+High: 1.20224
+Low: 1.19838
+Open: 1.19942
+Spread: 0.5
 ```
 
 Authorized session can access to more minor pairs. [Register](https://www.truefx.com).
@@ -75,7 +70,7 @@ feed := truefx.NewFeedBypass("USERNAME")
 feed.GetBySymbol("AUD/JPY")
 ```
 
-**Issue:** Getting a tick data by authorized session got an empty result `[]`; authorization was succeeded but something went wrong with the session. Even unauthorized session (request by fake id like ```&id=user:passwd:session:1```) can get a tick data of the above minor pairs, if you change the session_id everytime you request. So use .NewFeedBypass(username string) instead, but `username` must be a registered account.
+**Issue:** Getting a tick data by authorized session got an empty result `[]`; authorization was succeeded but something went wrong with the session. Even unauthorized session works (request by fake id like `&id=user:passwd:session:1`), if you change the `session_id` everytime you request. So use `.NewFeedBypass(username string)` instead, but `username` must be a registered account.
 
 ## Contributing
 
