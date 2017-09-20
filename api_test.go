@@ -26,7 +26,7 @@ func TestGetBySymbol(t *testing.T) {
 
 	ticks = feed.GetBySymbol("eurusd,gbpusd")
 	if len(ticks) != 2 {
-		t.Error("'euruse,gbpusd' failed")
+		t.Error("'eurusd,gbpusd' failed")
 	}
 
 	ticks = feed.GetBySymbol("EUR/USD,GBP/USD")
