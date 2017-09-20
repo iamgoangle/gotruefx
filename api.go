@@ -40,13 +40,14 @@ func (f *Feed) GetBySymbol(s string) []Tick {
 	var symbol string
 	var symbols string
 	for i, s := range strings.Split(s, ",") {
+		symbol = s
 		if !strings.Contains(s, "/") {
 			symbol = s[:3] + "/" + s[3:]
-			if i > 0 {
-				symbols += "," + symbol
-			} else {
-				symbols = symbol
-			}
+		}
+		if i > 0 {
+			symbols += "," + symbol
+		} else {
+			symbols = symbol
 		}
 	}
 	uri := f.baseURI + "&c=" + strings.ToUpper(symbols)
@@ -114,7 +115,6 @@ func NewFeed() *Feed {
 
 func NewFeedAuthorized(username string, password string) (*Feed, error) {
 	feed := NewFeed()
-	feed.baseURI = "https://webrates.truefx.com/rates/connect.html?f=csv"
 	uri := feed.baseURI + "&u=" + username + "&p=" + password + "&q=fx"
 	resp, err := http.Get(uri)
 	if err != nil {

@@ -1,47 +1,43 @@
 package truefx
 
 import (
-	"encoding/json"
 	"testing"
 )
 
-func TestGet(t *testing.T) {
-	var ticks []Tick
+func TestGetAll(t *testing.T) {
 	feed := NewFeed()
-	result := feed.Get()
-	err := json.Unmarshal(result, &ticks)
-	if err != nil {
-		t.Fatal(err)
-	}
+	ticks := feed.Get()
 	if len(ticks) < 1 {
-		t.Error("The returned result is incorrect.")
+		t.Error("Cannot get")
 	}
 }
 
 func TestGetBySymbol(t *testing.T) {
-	var ticks []Tick
 	feed := NewFeed()
-	result := feed.GetBy("EUR/USD")
-	err := json.Unmarshal(result, &ticks)
-	if err != nil {
-		t.Fatal(err)
-	}
+	ticks := feed.GetBySymbol("eur/usd")
 	if len(ticks) != 1 {
-		t.Error("The returned result is incorrect.")
+		t.Error("'eur/usd' failed")
+	}
+
+	ticks = feed.GetBySymbol("eurusd")
+	if len(ticks) != 1 {
+		t.Error("'eurusd' failed")
+	}
+
+	ticks = feed.GetBySymbol("eurusd,gbpusd")
+	if len(ticks) != 2 {
+		t.Error("'euruse,gbpusd' failed")
+	}
+
+	ticks = feed.GetBySymbol("EUR/USD,GBP/USD")
+	if len(ticks) != 2 {
+		t.Error("'EUR/USD,GBP/USD' failed")
 	}
 }
 
-func TestGetBySymbolWithAuthorizedSession(t *testing.T) {
-	var ticks []Tick
-	feed, err := NewFeedAuthorize("user", "passwd")
-	if err != nil {
-		t.Fatal(err)
-	}
-	result := feed.GetBy("AUD/JPY")
-	err = json.Unmarshal(result, &ticks)
-	if err != nil {
-		t.Fatal(err)
-	}
+func TestGetBySymbolWithBypassAuthorizedSession(t *testing.T) {
+	feed := NewFeedBypass("admin")
+	ticks := feed.GetBySymbol("AUD/JPY")
 	if len(ticks) == 0 {
 		t.Log(feed.uri)
 		t.Error("The session is incorrect.")
