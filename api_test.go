@@ -1,4 +1,4 @@
-package truefx
+package gotruefx
 
 import (
 	"testing"
