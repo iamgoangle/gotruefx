@@ -23,7 +23,7 @@ package main
 import (
   "fmt"
 
-  "github.com/tonkla/gotruefx"
+  truefx "github.com/tonkla/gotruefx"
 )
 
 func main() {
